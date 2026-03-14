@@ -1,0 +1,22 @@
+---
+layout: base.njk
+---
+
+<gif-gallery data-base-url="{{ site.baseUrl }}">
+  <gif-filters></gif-filters>
+  <div class="gif-grid" role="list" aria-label="GIF gallery">
+    {% for item in gifs.items %}
+    <gif-card
+      data-id="{{ item.id }}"
+      data-src="{{ ('/' + item.src) | url }}"
+      data-title="{{ item.title }}"
+      data-tags="{{ item.tags | join(',') }}"
+      data-category="{{ item.category }}"
+      data-subcategory="{{ item.subcategory or '' }}"
+      data-bytes="{{ item.bytes }}"
+      data-ext="{{ item.ext }}"
+      role="listitem"
+    ></gif-card>
+    {% endfor %}
+  </div>
+</gif-gallery>

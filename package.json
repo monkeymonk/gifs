@@ -1,0 +1,18 @@
+{
+  "name": "gifs-library",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/build-index.mjs && npx @11ty/eleventy --serve",
+    "build": "node scripts/build-index.mjs && npx @11ty/eleventy",
+    "index": "node scripts/build-index.mjs",
+    "screenshots": "node scripts/screenshots.mjs"
+  },
+  "dependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.0"
+  }
+}

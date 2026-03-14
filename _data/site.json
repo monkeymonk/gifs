@@ -1,0 +1,14 @@
+{
+  "title": "GIF Vault",
+  "description": "Personal reaction GIF library",
+  "baseUrl": "/gifs",
+  "repo": "https://github.com/monkeymonk/gifs",
+  "theme": {
+    "accent": "#f59e0b",
+    "bg": "#030712",
+    "surface": "#111827",
+    "border": "#1f2937",
+    "text": "#f3f4f6",
+    "textMuted": "#6b7280"
+  }
+}

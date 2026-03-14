@@ -1,0 +1,10 @@
+node_modules/
+docs/
+.ai/
+.github/
+public/
+data/
+src/components/
+src/pages/
+scripts/
+*.md
