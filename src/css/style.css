@@ -225,6 +225,9 @@ html.dark .view-tab[aria-selected="true"] {
   color: var(--text);
   border-color: var(--text-muted);
 }
+.zip-btn { display: inline-flex; align-items: center; gap: 0.25rem; }
+.zip-btn:disabled { opacity: 0.5; cursor: wait;
+}
 .count-display {
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;

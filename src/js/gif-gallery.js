@@ -60,6 +60,7 @@ class GifGallery extends HTMLElement {
     this.addEventListener('gif:preview', (e) => this._onPreview(e.detail));
     this.addEventListener('gif:favorite', (e) => this._onFavorite(e.detail));
     this.addEventListener('gif:toast', (e) => this._showToast(e.detail.message));
+    this.addEventListener('gif:download-zip', () => this._downloadZip());
     this.addEventListener('gif:lightbox-close', () => this._lightbox.close());
     this.addEventListener('gif:lightbox-change', (e) => {
       this._lightbox.updateFavorite(this._favorites.has(e.detail.id));
@@ -178,6 +179,46 @@ class GifGallery extends HTMLElement {
       filteredCount: this._items.length,
       favoritesCount: this._favorites.size,
     });
+  }
+
+  async _downloadZip() {
+    if (typeof JSZip === 'undefined') {
+      this._showToast('JSZip not loaded');
+      return;
+    }
+    const favItems = this._items.filter(item => this._favorites.has(item.id));
+    if (!favItems.length) return;
+
+    const zip = new JSZip();
+    let done = 0;
+    this._filters?.setZipProgress(0, favItems.length);
+    this._showToast(`Fetching 0/${favItems.length}...`);
+
+    for (const item of favItems) {
+      try {
+        const res = await fetch(item.src);
+        const blob = await res.blob();
+        const folder = item.category || 'uncategorized';
+        zip.file(`${folder}/${item.id}.${item.ext}`, blob);
+      } catch {
+        // skip failed files
+      }
+      done++;
+      this._filters?.setZipProgress(done, favItems.length);
+      this._showToast(`Fetching ${done}/${favItems.length}...`);
+    }
+
+    this._showToast('Creating ZIP...');
+    const content = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(content);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `gifs-${favItems.length}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    this._showToast('Download started');
   }
 
   _showToast(message) {

@@ -1,4 +1,5 @@
 const SEARCH_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>';
+const ZIP_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
 
 class GifFilters extends HTMLElement {
   constructor() {
@@ -75,6 +76,7 @@ class GifFilters extends HTMLElement {
             <button type="button" class="search-clear" aria-label="Clear search" style="${this._query ? '' : 'display:none'}">&#x2715;</button>
           </div>
           <div class="filter-actions">
+            <button type="button" class="btn-sm zip-btn" style="display:none" aria-label="Download favorites as ZIP">${ZIP_SVG} ZIP</button>
             <button type="button" class="btn-sm palette-trigger" aria-label="Open command palette">
               <span style="font-size:0.625rem;padding:0.125rem 0.25rem;border-radius:3px;border:1px solid var(--border);color:var(--text-muted)">⌘K</span>
             </button>
@@ -133,8 +135,12 @@ class GifFilters extends HTMLElement {
       tab.addEventListener('click', () => {
         this._viewMode = tab.dataset.mode;
         this._renderViewTabs();
+        this._renderZipBtn();
         this._emitFilter();
       });
+    });
+    this.querySelector('.zip-btn')?.addEventListener('click', () => {
+      this.dispatchEvent(new CustomEvent('gif:download-zip', { bubbles: true, composed: true }));
     });
 
     this._updateClearBtn();
@@ -184,6 +190,25 @@ class GifFilters extends HTMLElement {
         }
       }
     });
+    this._renderZipBtn();
+  }
+
+  _renderZipBtn() {
+    const btn = this.querySelector('.zip-btn');
+    if (!btn) return;
+    btn.style.display = (this._viewMode === 'favorites' && this._favoritesCount > 0) ? '' : 'none';
+  }
+
+  setZipProgress(current, total) {
+    const btn = this.querySelector('.zip-btn');
+    if (!btn) return;
+    if (current < total) {
+      btn.disabled = true;
+      btn.innerHTML = `${current}/${total}...`;
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = `${ZIP_SVG} ZIP`;
+    }
   }
 
   _updateClearBtn() {
