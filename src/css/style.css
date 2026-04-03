@@ -328,6 +328,7 @@ gif-card {
   height: 100%;
   object-fit: fill;
   z-index: 1;
+  pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -349,6 +350,7 @@ gif-card {
 .card-overlay {
   position: absolute;
   inset: 0;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
