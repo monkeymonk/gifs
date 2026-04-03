@@ -355,10 +355,11 @@ gif-card {
   padding: 0.75rem;
   background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.4) 50%, transparent);
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.2s;
 }
 .card:hover .card-overlay,
-.card:focus-within .card-overlay { opacity: 1; }
+.card:focus-within .card-overlay { opacity: 1; pointer-events: auto; }
 
 .card-overlay-fav {
   position: absolute;
